@@ -1,2 +1,4 @@
-# copilot-chat-widget
-Custom chat widget for our Copilot chatbot on Webflow.
+# Copilot Chat Widget
+This widget connects our Copilot chatbot to Webflow webstie.
+
+**Author:** Xiangwen Gui
