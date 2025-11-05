@@ -1,0 +1,93 @@
+/* ==== Chat window look & feel (from your footer CSS) ==== */
+#chat-window {
+  position: fixed;
+  bottom: 100px;
+  right: 24px;
+  width: 90vw;
+  max-width: 400px;
+  height: 70vh;
+  max-height: 600px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  display: none;
+  z-index: 9998;
+  overflow: hidden;
+  background: white;
+}
+
+.chat-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.chat-banner-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  background-color: #fff3d4; /* banner color */
+  color: black;               /* banner text color */
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  z-index: 2;
+  box-sizing: border-box;
+}
+
+/* IMPORTANT CHANGE:
+   We will render the SDK into #copilot-chat instead of an <iframe>.
+   So make #copilot-chat fill the space the iframe used to occupy. */
+#copilot-chat {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: none;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+#chat-toggle {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 64px;
+  height: 64px;
+  background: transparent;
+  font-size: 24px;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+#chat-toggle svg {
+  width: 100%;
+  height: 100%;
+  transition: transform 0.2s ease;
+}
+
+.banner-logo {
+  height: 20px;
+  width: 20px;
+  margin-right: 8px;
+}
+
+.icon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 64px;
+  height: 64px;
+  transition: opacity 0.2s ease;
+}
+
+.visible { opacity: 1; pointer-events: auto; }
+.hidden  { opacity: 0; pointer-events: none; }

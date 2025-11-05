@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Copilot Chat Widget (Preview)</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+
+  <!-- Toggle Button with Dynamic Icon -->
+  <button id="chat-toggle" aria-label="Chat Toggle">
+    <div id="chat-icon" style="position: relative; width: 100%; height: 100%;">
+      <div id="icon1" class="icon visible">
+        <!-- your SVG #1 -->
+        <svg width="188" height="188" viewBox="0 0 188 188" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="94" cy="94" r="94" fill="#1154F7"/>
+          <rect x="43" y="61" width="101.623" height="67.1744" rx="15" fill="white"/>
+          <path d="M99.6256 149.531C97.7197 151.244 94.6821 149.934 94.6209 147.372L93.9916 121.04C93.9501 119.307 95.3814 117.9 97.1132 117.97L125.735 119.14C128.424 119.25 129.619 122.57 127.618 124.369L99.6256 149.531Z" fill="white"/>
+          <circle cx="66.3722" cy="94.7067" r="8.73161" fill="#1154F7"/>
+          <circle cx="93.9103" cy="94.7067" r="8.73161" fill="#1154F7"/>
+          <circle cx="121.448" cy="94.7067" r="8.73161" fill="#1154F7"/>
+        </svg>
+      </div>
+      <div id="icon2" class="icon hidden">
+        <!-- your SVG #2 -->
+        <svg width="188" height="188" viewBox="0 0 188 188" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="94" cy="94" r="94" fill="#1154F7"/>
+          <circle cx="58.1944" cy="93.8055" r="11.1944" fill="white"/>
+          <circle cx="93.5001" cy="93.8055" r="11.1944" fill="white"/>
+          <circle cx="128.806" cy="93.8055" r="11.1944" fill="white"/>
+        </svg>
+      </div>
+      <div id="icon3" class="icon hidden">
+        <!-- your SVG #3 -->
+        <svg width="188" height="188" viewBox="0 0 188 188" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="94" cy="94" r="94" fill="#1154F7"/>
+          <rect width="10.2856" height="71.5514" rx="5.14282" transform="matrix(-0.654906 -0.75571 -0.644332 0.764746 139.999 80.281)" fill="white"/>
+          <rect width="10.2856" height="71.5514" rx="5.14282" transform="matrix(0.654906 -0.75571 0.644332 0.764746 46.999 79.2812)" fill="white"/>
+        </svg>
+      </div>
+    </div>
+  </button>
+
+  <!-- Chat Window -->
+  <div id="chat-window">
+    <div class="chat-wrapper">
+      <!-- Overlapping banner -->
+      <div class="chat-banner-overlay">
+        <img src="https://cdn.prod.website-files.com/641341a7df38fd0e3ac20f45/64d073c171643e07b4b563bd_Favcon32x32.png" alt="Logo" class="banner-logo" />
+        <span>Need help? Ask our AI Assistant</span>
+      </div>
+
+      <!-- SDK target (replaces the iframe) -->
+      <div id="copilot-chat"></div>
+    </div>
+  </div>
+
+  <!-- Your widget boot file (we’ll paste the SDK init in here next) -->
+  <script src="./widget.js"></script>
+
+  <!-- Button behavior & icon swaps (your original logic, with a small fix) -->
+  <script>
+    const chatToggle = document.getElementById("chat-toggle");
+    const chatWindow = document.getElementById("chat-window");
+    const icon1Div = document.getElementById('icon1');
+    const icon2Div = document.getElementById('icon2');
+    const icon3Div = document.getElementById('icon3');
+
+    let isOpen = false;
+    let isTransitioning = false;
+
+    function showIcon(iconDiv) {
+      [icon1Div, icon2Div, icon3Div].forEach(div => {
+        div.classList.add('hidden');
+        div.classList.remove('visible');
+      });
+      iconDiv.classList.remove('hidden');
+      iconDiv.classList.add('visible');
+    }
+
+    // enable hover swap on non-touch devices
+    const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
+    if (!isTouchDevice) {
+      chatToggle.addEventListener("mouseenter", () => { if (!isOpen) showIcon(icon2Div); });
+      chatToggle.addEventListener("mouseleave", () => { if (!isOpen) showIcon(icon1Div); });
+    }
+
+    chatToggle.addEventListener("click", () => {
+      if (isTransitioning) return;
+      isTransitioning = true;
+      isOpen = !isOpen;
+
+      chatWindow.style.display = isOpen ? "block" : "none";
+      showIcon(isOpen ? icon3Div : icon1Div);
+
+      setTimeout(() => { isTransitioning = false; }, 300);
+    });
+  </script>
+</body>
+</html>
