@@ -21,31 +21,43 @@
     if (!mount) return;
 
     // --- ⬇⬇⬇ PASTE MICROSOFT COPILOT SDK SNIPPET BELOW THIS LINE ⬇⬇⬇
-    // --- PASTE THIS WHERE INDICATED IN widget.js ---
+    // 1) Grab the mount element
+    const root = document.getElementById('copilot-chat');
+    if (!root) return;
 
-    // 1) Your connection string (the long URL you copied)
-    const connectionString = "https://61f038cd782ce2a9b393e0ba817546.03.environment.api.powerplatform.com/copilotstudio/dataverse-backed/authenticated/bots/cr6d0_internalAgent/conversations?api-version=2022-03-01-preview";
+    // 2) Your Copilot identifiers
+    // Get these from Copilot Studio → your Copilot → Settings → Advanced → Metadata
+    // They will be labeled like "Bot ID" and "Tenant ID".
+    const botId = "15136286-698c-43c0-9d29-ffff20d35884";
+    const tenantId = "f8f8a500-fb4e-413a-b047-f60fcffcfe8e";
 
-    // 2) Try to initialize the Microsoft 365 Agents SDK (browser build)
-    if (window.MicrosoftAgents && typeof window.MicrosoftAgents.createClient === "function") {
-    const client = await window.MicrosoftAgents.createClient({ connectionString });
-
-    await client.renderWebChat({
-        element: mount, // <div id="copilot-chat">
-        // OPTIONAL: pass theme/style options here when you’re ready
-    });
+    // 3) Initialize via the UMD bundle we built
+    if (window.CCWidget && typeof window.CCWidget.init === "function") {
+      await window.CCWidget.init({
+        element: root,
+        botId,
+        tenantId,
+        styleOptions: {
+          // Match your outer UI:
+          bubbleRadius: 12,
+          bubbleBorderRadius: 12,
+          bubbleBackground: "#ffffff",
+          bubbleFromUserBackground: "#1154F7",
+          bubbleFromUserTextColor: "#ffffff",
+          primaryFont:
+            "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+        }
+      });
     } else {
-    // If the global isn’t present, the SDK script wasn’t loaded yet.
-    // Add the SDK <script> tag from Copilot Studio docs into your index.html <head>
-    mount.innerHTML = `
+      root.innerHTML = `
         <div style="font:14px/1.5 ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,Arial;padding:16px;">
-        <strong>SDK script not loaded.</strong>
-        <div style="margin-top:8px;">
-            In <code>index.html</code>, add the Microsoft 365 Agents SDK &nbsp;<code>&lt;script src="..."&gt;</code>
-            (the one Copilot Studio shows above the connection string), <em>above</em> <code>widget.js</code>.
+          <strong>Widget bundle not loaded.</strong>
+          <div style="margin-top:8px;">
+            Ensure <code>ccwidget.umd.js</code> is loaded via
+            <code>&lt;script src="./ccwidget.umd.js"&gt;</code> in &lt;head&gt; before <code>widget.js</code>.
+          </div>
         </div>
-        </div>
-    `;
+      `;
     }
     // --- ⬆⬆⬆ STOP PASTING ABOVE THIS LINE ⬆⬆⬆
 
